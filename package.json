@@ -1,6 +1,6 @@
 {
   "name": "uni-state-storage",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Tiny, fast state management with optional persistent storage. One simple API for in-memory state, AsyncStorage-style persistence, or both.",
   "keywords": [
     "state",
