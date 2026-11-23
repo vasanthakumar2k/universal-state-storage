@@ -1,0 +1,72 @@
+{
+  "name": "uni-state-storage",
+  "version": "0.1.0",
+  "description": "Tiny, fast state management with optional persistent storage. One simple API for in-memory state, AsyncStorage-style persistence, or both.",
+  "keywords": [
+    "state",
+    "state-management",
+    "store",
+    "persist",
+    "storage",
+    "localStorage",
+    "asyncstorage",
+    "react",
+    "react-native"
+  ],
+  "license": "MIT",
+  "author": "vasanthakumar2k",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vasanthakumar2k/universal-state-storage.git"
+  },
+  "homepage": "https://github.com/vasanthakumar2k/universal-state-storage#readme",
+  "bugs": {
+    "url": "https://github.com/vasanthakumar2k/universal-state-storage/issues"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tests",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "smoke": "node scripts/smoke.mjs",
+    "demo": "npm run build && node examples/vanilla-js/app.js",
+    "verify": "npm run typecheck && npm test && npm run build && npm run smoke && node examples/vanilla-js/app.js",
+    "prepublishOnly": "npm run verify"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^5.1.1",
+    "esbuild": "^0.28.2",
+    "tsup": "^9.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.1"
+  }
+}

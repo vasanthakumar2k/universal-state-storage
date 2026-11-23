@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="960" height="300" rx="16" fill="#f8fafc"/>
+  <text x="480" y="42" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">What happens when you update the store</text>
+
+  <g font-size="13" text-anchor="middle">
+    <!-- 1 -->
+    <rect x="24" y="72" width="204" height="140" rx="14" fill="#ffffff" stroke="#c7d2fe" stroke-width="2"/>
+    <circle cx="126" cy="98" r="16" fill="#6366f1"/><text x="126" y="103" fill="#fff" font-weight="700" font-size="15">1</text>
+    <text x="126" y="136" font-size="16" font-weight="700" fill="#0f172a">You update</text>
+    <text x="126" y="166" font-family="Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12" fill="#4338ca">setItem('name',</text>
+    <text x="126" y="184" font-family="Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12" fill="#4338ca">'Vasanth')</text>
+
+    <path d="M232 142 H 258" stroke="#94a3b8" stroke-width="3" marker-end="url(#a)"/>
+
+    <!-- 2 -->
+    <rect x="264" y="72" width="204" height="140" rx="14" fill="#ffffff" stroke="#a7f3d0" stroke-width="2"/>
+    <circle cx="366" cy="98" r="16" fill="#10b981"/><text x="366" y="103" fill="#fff" font-weight="700" font-size="15">2</text>
+    <text x="366" y="136" font-size="16" font-weight="700" fill="#0f172a">State changes</text>
+    <text x="366" y="164" fill="#475569">instantly, in memory</text>
+    <text x="366" y="184" fill="#475569">(synchronous, no waiting)</text>
+
+    <path d="M472 142 H 498" stroke="#94a3b8" stroke-width="3" marker-end="url(#a)"/>
+
+    <!-- 3 -->
+    <rect x="504" y="72" width="204" height="140" rx="14" fill="#ffffff" stroke="#fde68a" stroke-width="2"/>
+    <circle cx="606" cy="98" r="16" fill="#f59e0b"/><text x="606" y="103" fill="#fff" font-weight="700" font-size="15">3</text>
+    <text x="606" y="136" font-size="16" font-weight="700" fill="#0f172a">Subscribers run</text>
+    <text x="606" y="164" fill="#475569">every subscribe() callback</text>
+    <text x="606" y="184" fill="#475569">gets the new state</text>
+
+    <path d="M712 142 H 738" stroke="#94a3b8" stroke-width="3" marker-end="url(#a)"/>
+
+    <!-- 4 -->
+    <rect x="744" y="72" width="192" height="140" rx="14" fill="#ffffff" stroke="#fbcfe8" stroke-width="2"/>
+    <circle cx="840" cy="98" r="16" fill="#ec4899"/><text x="840" y="103" fill="#fff" font-weight="700" font-size="15">4</text>
+    <text x="840" y="136" font-size="16" font-weight="700" fill="#0f172a">Read anywhere</text>
+    <text x="840" y="166" font-family="Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12" fill="#be185d">getItem('name')</text>
+    <text x="840" y="184" font-family="Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12" fill="#be185d">// 'Vasanth'</text>
+  </g>
+
+  <rect x="24" y="234" width="912" height="44" rx="12" fill="#fff7ed" stroke="#fed7aa" stroke-dasharray="6 4"/>
+  <text x="480" y="261" text-anchor="middle" font-size="14" fill="#9a3412"><tspan font-weight="700">Coming next:</tspan> saving to storage (localStorage, AsyncStorage, MMKV) runs in the background after step 2.</text>
+</svg>
