@@ -32,6 +32,29 @@ export interface StoreOptions {
   onError?: (error: unknown) => void;
 }
 
+/**
+ * Where persisted state lives. `localStorage` already satisfies this, and so do
+ * async stores such as React Native's AsyncStorage.
+ */
+export interface StorageAdapter {
+  getItem(key: string): string | null | undefined | PromiseLike<string | null | undefined>;
+  setItem(key: string, value: string): void | PromiseLike<unknown>;
+  removeItem(key: string): void | PromiseLike<unknown>;
+}
+
+export interface PersistOptions<T = unknown> extends StoreOptions {
+  /** Storage to use. Defaults to `localStorage`; falls back to memory-only when unavailable (SSR, blocked storage). */
+  storage?: StorageAdapter;
+  /** Storage key. Defaults to the store name. */
+  key?: string;
+  /** Bump when the shape of the saved state changes. Default `0`. */
+  version?: number;
+  /** Converts state saved under an older `version`. Without it, old saved data is ignored. */
+  migrate?: (stored: unknown, storedVersion: number) => unknown;
+  /** Chooses what gets saved, e.g. leave out a token: `s => ({ cart: s.cart })`. */
+  partialize?: (state: T) => unknown;
+}
+
 export interface Store<T> {
   /** The name the store was created with. Used as the storage key when persistence is enabled. */
   readonly name: string;
@@ -75,7 +98,8 @@ export interface Store<T> {
 
   /**
    * Resolves once the store is ready to use. In-memory stores are ready
-   * immediately, so this resolves on the next microtask.
+   * immediately. Persisted stores resolve once saved data has been loaded
+   * (with localStorage it is already loaded when `createStore.persist` returns).
    */
   ready(): Promise<void>;
 }
