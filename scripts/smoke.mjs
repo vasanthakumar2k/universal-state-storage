@@ -11,13 +11,19 @@ import { build } from 'esbuild';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const run = (cmd, args, cwd) => execFileSync(cmd, args, { cwd, stdio: 'pipe', encoding: 'utf8' });
 
-const tarball = run('npm', ['pack', '--silent', '--pack-destination', tmpdir()], root).trim().split('\n').pop();
+// Spawning `npm` directly fails on Windows (it is npm.cmd), so run npm's JS entry with node.
+const npmCli = process.env.npm_execpath?.endsWith('.js')
+  ? process.env.npm_execpath
+  : join(dirname(process.execPath), process.platform === 'win32' ? 'node_modules' : '../lib/node_modules', 'npm/bin/npm-cli.js');
+const npm = (args, cwd) => run(process.execPath, [npmCli, ...args], cwd);
+
+const tarball = npm(['pack', '--silent', '--pack-destination', tmpdir()], root).trim().split('\n').pop();
 const tarPath = join(tmpdir(), tarball);
 const dir = mkdtempSync(join(tmpdir(), 'uni-state-storage-smoke-'));
 
 try {
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'consumer', private: true, type: 'module' }));
-  run('npm', ['install', '--silent', '--no-audit', '--no-fund', tarPath, `typescript@${readTsVersion()}`], dir);
+  npm(['install', '--silent', '--no-audit', '--no-fund', tarPath, `typescript@${readTsVersion()}`], dir);
 
   writeFileSync(
     join(dir, 'esm.mjs'),
@@ -62,7 +68,7 @@ export { age };`,
 
   process.stdout.write(run('node', ['esm.mjs'], dir));
   process.stdout.write(run('node', ['cjs.cjs'], dir));
-  run(join(dir, 'node_modules/.bin/tsc'), ['-p', '.'], dir);
+  run('node', [join(dir, 'node_modules/typescript/bin/tsc'), '-p', '.'], dir);
   console.log('types ok');
 
   // Size of what a bundler ships for `import { createStore }` (minified + gzip).
