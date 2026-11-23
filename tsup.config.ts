@@ -9,4 +9,5 @@ export default defineConfig({
   treeshake: true,
   target: 'es2020',
   minify: false,
+  onSuccess: 'node scripts/post-build.mjs',
 });

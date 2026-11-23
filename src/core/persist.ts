@@ -68,6 +68,28 @@ function resolveDefaultStorage(): StorageAdapter | undefined {
   }
 }
 
+declare const require: ((id: string) => unknown) | undefined;
+
+/**
+ * React Native only: use AsyncStorage if the app has installed it.
+ * It is NOT a dependency of this package; nothing is added to the app. The
+ * require is a plain string literal inside try/catch so Metro treats it as
+ * optional and the bundle still builds when AsyncStorage is not installed.
+ */
+function resolveReactNativeStorage(): StorageAdapter | undefined {
+  if (!isReactNative()) return undefined;
+  try {
+    const mod = require!('@react-native-async-storage/async-storage') as ({ default?: StorageAdapter } & Partial<StorageAdapter>) | undefined;
+    const storage = (mod?.default ?? mod) as StorageAdapter | undefined;
+    if (storage && typeof storage.getItem === 'function' && typeof storage.setItem === 'function' && typeof storage.removeItem === 'function') {
+      return storage;
+    }
+  } catch {
+    // AsyncStorage is not installed in this app
+  }
+  return undefined;
+}
+
 interface Envelope {
   v: number;
   state: unknown;
@@ -97,13 +119,13 @@ export function buildPersistedStore<T>(name: string, initialState: T, options: P
     else warn(`[uni-state-storage] persistence error in store "${name}":`, error);
   };
 
-  const storage = options.storage ?? defaultStorage ?? resolveDefaultStorage();
+  const storage = options.storage ?? defaultStorage ?? resolveDefaultStorage() ?? resolveReactNativeStorage();
   if (!storage) {
     // No storage available (SSR, blocked storage): behave as a normal in-memory store.
     if (isReactNative()) {
       warn(
         `[uni-state-storage] store "${name}" is NOT being saved: React Native has no localStorage. ` +
-          'Call setDefaultStorage(AsyncStorage) once at app start (before creating stores), or pass { storage }.',
+          'Install @react-native-async-storage/async-storage (it is picked up automatically), or call setDefaultStorage(...) once at app start, or pass { storage }.',
       );
     }
     return base;
